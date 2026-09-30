@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>Test</title>
+<item><title>В Екатеринбурге прошла страйкбольная игра «Уральский рубеж»</title>
+<link>https://example.ru/news/1?utm_source=rss</link>
+<description>&lt;p&gt;Более 300 игроков собрались на полигоне.&lt;/p&gt;</description>
+<pubDate>Mon, 28 Sep 2026 10:00:00 +0300</pubDate></item>
+<item><title>Госдума обсуждает закон о страйкболе</title>
+<link>https://example.ru/news/2</link>
+<description>Росгвардия предлагает новые правила.</description>
+<pubDate>Sun, 27 Sep 2026 12:00:00 +0300</pubDate></item>
+<item><title>Продам привод для страйкбола</title>
+<link>https://example.ru/news/3</link>
+<pubDate>Sun, 27 Sep 2026 12:00:00 +0300</pubDate></item>
+<item><title>Погода на выходные</title>
+<link>https://example.ru/news/4</link>
+<pubDate>Sun, 27 Sep 2026 12:00:00 +0300</pubDate></item>
+<item><title>Airsoft championship announced in Poland</title>
+<link>https://example.com/a</link>
+<pubDate>Sat, 26 Sep 2026 12:00:00 +0000</pubDate></item>
+<item><title>Старый страйкбольный турнир</title>
+<link>https://example.ru/news/old</link>
+<pubDate>Mon, 01 Jan 2024 12:00:00 +0300</pubDate></item>
+</channel></rss>

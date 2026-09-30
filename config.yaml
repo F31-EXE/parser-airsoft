@@ -1,0 +1,92 @@
+# Настройки агрегатора. Токены сюда НЕ пишем — они берутся из переменных окружения:
+#   VK_TOKEN            — для источников vk_wall / vk_search
+#   TELEGRAM_BOT_TOKEN  — для отправки дайджеста себе в Telegram (--send-telegram)
+#   TELEGRAM_CHAT_ID
+
+max_age_days: 7      # новости старше не берём
+per_region: 10       # максимум новостей на раздел в дайджесте
+hashtags: "#страйкбол #airsoft #екатеринбург #страйкбол_урал"
+
+# region: ural | russia | world — регион по умолчанию для источника.
+# Если в тексте встретится место из ural_places, новость всё равно уйдёт в «Свердловскую область».
+# always_relevant: true — источник целиком про страйкбол, фильтр по ключевым словам не применяется.
+sources:
+  # --- Google News: поиск по СМИ, работает без ключей ---
+  - type: rss
+    name: "Google News: страйкбол Урал"
+    region: ural
+    url: "https://news.google.com/rss/search?q=%D1%81%D1%82%D1%80%D0%B0%D0%B9%D0%BA%D0%B1%D0%BE%D0%BB+(%D0%95%D0%BA%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%BD%D0%B1%D1%83%D1%80%D0%B3+OR+%D0%A1%D0%B2%D0%B5%D1%80%D0%B4%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B9)&hl=ru&gl=RU&ceid=RU:ru"
+  - type: rss
+    name: "Google News: страйкбол"
+    region: russia
+    url: "https://news.google.com/rss/search?q=%D1%81%D1%82%D1%80%D0%B0%D0%B9%D0%BA%D0%B1%D0%BE%D0%BB&hl=ru&gl=RU&ceid=RU:ru"
+  - type: rss
+    name: "Google News: airsoft"
+    region: world
+    url: "https://news.google.com/rss/search?q=airsoft&hl=en-US&gl=US&ceid=US:en"
+
+  # --- Поиск по всем открытым постам ВК (нужен пользовательский VK_TOKEN) ---
+  - type: vk_search
+    query: "страйкбол Екатеринбург"
+    region: ural
+  - type: vk_search
+    query: "страйкбол Свердловская область"
+    region: ural
+
+  # --- Стены сообществ ВК: впишите короткие имена (vk.com/<имя>) или id со знаком минус ---
+  # - type: vk_wall
+  #   group: "short_name_of_group"
+  #   region: ural
+  #   always_relevant: true
+
+  # --- Публичные Telegram-каналы (читаются через t.me/s/<канал>, без ключей) ---
+  # - type: telegram
+  #   channel: "channel_name"
+  #   region: russia
+  #   always_relevant: true
+
+  # --- Любой сайт с RSS: магазины, клубы, зарубежные порталы ---
+  # - type: rss
+  #   name: "Popular Airsoft"
+  #   url: "https://www.popularairsoft.com/feed"
+  #   region: world
+  #   always_relevant: true
+
+filters:
+  # Новость проходит, если есть хотя бы одно из слов (совпадение с начала слова).
+  keywords:
+    - страйкбол
+    - страйкбольн
+    - airsoft
+    - milsim
+    - милсим
+    - военно-тактическ
+  # Новость отбрасывается, если есть любое из этих слов (барахолка, реклама).
+  exclude:
+    - продам
+    - продаю
+    - куплю
+    - барахолк
+    - "в наличии"
+  ural_places:
+    - екатеринбург
+    - екб
+    - свердловск
+    - урал
+    - тагил
+    - каменск-уральск
+    - первоуральск
+    - пышм
+    - берёзовск
+    - березовск
+    - асбест
+    - ревд
+    - полевско
+    - новоуральск
+    - арамил
+    - сысерт
+  tags:
+    games: [игра, игры, игре, анонс, регистрац, полигон, сценари]
+    law: [закон, законопроект, росгвардия, мвд, запрет, штраф, пневматик]
+    tournament: [турнир, чемпионат, соревнован, кубок, federation, федерац]
+    gear: [привод, страйкбольный пистолет, снаряжен, экипировк, новинк, "tokyo marui", "g&g", krytac]
