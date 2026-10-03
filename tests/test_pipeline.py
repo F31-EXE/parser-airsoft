@@ -81,3 +81,24 @@ def test_digest_render():
     text = render_text(groups, now)
     assert text.startswith("Новости страйкбола на 30.09.2026")
     assert text.index("Свердловская") < text.index("Россия") < text.index("Мир")
+
+
+def test_google_news_cleanup():
+    items = parse_rss((FIXTURES / "google_news.xml").read_bytes(), "Google News")
+    by_source = {i.source: i for i in items}
+    payson = by_source["paysonroundup.com"]
+    assert payson.title == "4-H airsoft tournament brings youth competitors to Payson"
+    assert payson.text == ""
+    zab = by_source["Официальный портал Забайкальского края"]
+    assert zab.title == "Ветеран СВО основал федерацию страйкбола Забайкалья"
+    assert zab.text == ""
+    # Криминальная хроника отсеивается, турнир и федерация остаются.
+    kept = {i.title for i in filter_items(items, classifier(), SINCE)}
+    assert kept == {payson.title, zab.title}
+
+
+def test_same_story_from_two_publishers_is_deduped(tmp_path):
+    storage = Storage(tmp_path / "db.sqlite3")
+    a = NewsItem("CK News Today", "Airsoft tournament held in Chatham this weekend", "https://n.g/a")
+    b = NewsItem("CKNX News Today", "Airsoft tournament held in Chatham this weekend", "https://n.g/b")
+    assert storage.filter_new([a, b]) == [a]

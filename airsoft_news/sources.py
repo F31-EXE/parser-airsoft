@@ -32,8 +32,12 @@ def _get(url: str, **kwargs) -> requests.Response:
     return resp
 
 
+ZERO_WIDTH = re.compile("[\u200b\u200c\u200d\u2060\ufeff]")
+
+
 def _strip_html(html: str) -> str:
-    return BeautifulSoup(html or "", "html.parser").get_text(" ", strip=True)
+    text = BeautifulSoup(html or "", "html.parser").get_text(" ", strip=True)
+    return ZERO_WIDTH.sub("", text).strip()
 
 
 def _first_line(text: str, limit: int = 120) -> str:
@@ -56,11 +60,24 @@ def parse_rss(content: bytes | str, name: str) -> list[NewsItem]:
                 published = parsedate_to_datetime(entry.published)
             except (TypeError, ValueError):
                 pass
+        title = _strip_html(entry.get("title", ""))
+        text = _strip_html(entry.get("summary", ""))
+        source = name
+        # Google News дописывает издание в конец заголовка («… - CK News Today»), а в описание
+        # кладёт только заголовок и издание. Убираем это, чтобы одна новость из разных
+        # изданий склеивалась при дедупликации и в сводке не было пустых «цитат».
+        publisher = _strip_html((entry.get("source") or {}).get("title", ""))
+        if publisher:
+            source = publisher
+            if title.endswith(f" - {publisher}"):
+                title = title[: -len(publisher) - 3].rstrip()
+        if normalize_title(text) in (normalize_title(title), normalize_title(f"{title} {publisher}")):
+            text = ""
         items.append(NewsItem(
-            source=name,
-            title=_strip_html(entry.get("title", "")),
+            source=source,
+            title=title,
             url=entry.get("link", ""),
-            text=_strip_html(entry.get("summary", "")),
+            text=text,
             published=published,
         ))
     return items

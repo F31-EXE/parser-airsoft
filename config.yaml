@@ -67,6 +67,22 @@ filters:
     - куплю
     - барахолк
     - "в наличии"
+    # Криминальная хроника: «подросток напал со страйкбольным пистолетом» и т.п.
+    - задержан
+    - ограбл
+    - грабител
+    - напал
+    - угрожал
+    - lockdown
+    - arrested
+    - charged
+    - suspect
+    - police
+    - sheriff
+    - robbery
+    - seized
+    - student
+    - "school bus"
   ural_places:
     - екатеринбург
     - екб
