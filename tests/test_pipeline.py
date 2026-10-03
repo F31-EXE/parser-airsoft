@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 
 from airsoft_news.classify import Classifier, filter_items
-from airsoft_news.digest import group_by_region, render_markdown, render_vk_post
+from airsoft_news.digest import group_by_region, render_markdown, render_text
 from airsoft_news.models import NewsItem
 from airsoft_news.sources import parse_rss, parse_telegram, vk_posts_to_items
 from airsoft_news.storage import Storage
@@ -78,7 +78,6 @@ def test_digest_render():
     md = render_markdown(groups, now)
     assert "## 🏔 Свердловская область (1)" in md
     assert "https://example.ru/news/1?utm_source=rss" in md
-    post = render_vk_post(groups, now, "#страйкбол")
-    assert post.startswith("📰 Новости страйкбола — 30.09.2026")
-    assert post.index("СВЕРДЛОВСКАЯ") < post.index("РОССИЯ") < post.index("МИР")
-    assert post.rstrip().endswith("#страйкбол")
+    text = render_text(groups, now)
+    assert text.startswith("Новости страйкбола на 30.09.2026")
+    assert text.index("Свердловская") < text.index("Россия") < text.index("Мир")

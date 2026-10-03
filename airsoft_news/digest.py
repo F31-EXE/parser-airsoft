@@ -1,4 +1,4 @@
-"""Сборка дайджеста: подробный Markdown для себя и черновик поста для ВК."""
+"""Сборка сводки найденных новостей."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -50,18 +50,16 @@ def render_markdown(groups: dict[str, list[NewsItem]], generated: datetime) -> s
     return "\n".join(lines)
 
 
-def render_vk_post(groups: dict[str, list[NewsItem]], generated: datetime, hashtags: str = "") -> str:
-    """Черновик поста. ВК не понимает Markdown, поэтому только текст, эмодзи и ссылки."""
-    lines = [f"📰 Новости страйкбола — {generated:%d.%m.%Y}", ""]
+def render_text(groups: dict[str, list[NewsItem]], generated: datetime) -> str:
+    """Короткий текстовый список для Telegram: заголовок и ссылка."""
+    lines = [f"Новости страйкбола на {generated:%d.%m.%Y}", ""]
     for region in REGION_ORDER:
         items = groups.get(region, [])
         if not items:
             continue
-        lines.append(f"{REGION_EMOJI[region]} {REGION_TITLES[region].upper()}")
+        lines.append(f"{REGION_EMOJI[region]} {REGION_TITLES[region]}")
         for item in items:
             lines.append(f"▪ {item.title}")
             lines.append(f"  {item.url}")
         lines.append("")
-    if hashtags:
-        lines.append(hashtags)
     return "\n".join(lines).strip() + "\n"

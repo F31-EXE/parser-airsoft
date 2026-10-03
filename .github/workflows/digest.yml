@@ -1,4 +1,4 @@
-name: Страйкбол-дайджест
+name: Сбор новостей страйкбола
 
 on:
   schedule:
@@ -23,7 +23,7 @@ jobs:
           key: seen-db-${{ github.run_id }}
           restore-keys: seen-db-
 
-      - name: Собрать дайджест
+      - name: Собрать новости
         env:
           VK_TOKEN: ${{ secrets.VK_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
